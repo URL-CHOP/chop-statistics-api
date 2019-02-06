@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: local
+
+server:
+  port: 8081
+
+---
+spring:
+  profiles: prod
+
+server:
+  port: 8080
+
+

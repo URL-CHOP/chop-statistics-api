@@ -2,14 +2,29 @@ package me.nexters.chopstatsapi.grpc;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import me.nexters.chopstatsapi.domain.PlatformVO;
+import me.nexters.chopstatsapi.domain.RefererVO;
+import me.nexters.chopstatsapi.domain.TotalCountVO;
+import me.nexters.chopstatsapi.service.PlatformService;
+import me.nexters.chopstatsapi.service.RefererService;
+import me.nexters.chopstatsapi.service.TotalCountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author junho.park
  */
+@Service
 public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
+    @Autowired
+    private PlatformService platformService;
+    @Autowired
+    private RefererService refererService;
+    @Autowired
+    private TotalCountService totalCountService;
 
     @Override
     public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
@@ -19,13 +34,13 @@ public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
             responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
         }
 
-        // TODO now hardcoded (mybatis 로 디비 접근 구현)
-        Platform platform = Platform.newBuilder()
-                .setShortUrl(shortenUrl)
-                .setBrowser(3)
-                .setMobile(2)
-                .build();
+        PlatformVO platformVO = platformService.getPlatformByShortUrl(shortenUrl);
 
+        Platform platform = Platform.newBuilder()
+                .setShortUrl(platformVO.getShort_url())
+                .setBrowser(platformVO.getBrowser())
+                .setMobile(platformVO.getMobile())
+                .build();
 
         responseObserver.onNext(platform);
         responseObserver.onCompleted();
@@ -39,14 +54,12 @@ public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
             responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
         }
 
-        // TODO now hardcoded (mybatis 로 디비 접근 구현)
-        List<String> refererList = new LinkedList<>();
-        List<Integer> countList = new LinkedList<>();
+        List<RefererVO> refererVOList = refererService.findRefererByShortUrl(shortenUrl);
+        List<String> refererList = getRefererListFromRefererCount(refererVOList);
+        List<Integer> countList = getCountListFromRefererCount(refererVOList);
 
-        refererList.add("https://naver.com");
-        refererList.add("https://facebook.com");
-        countList.add(2);
-        countList.add(3);
+        System.out.println(refererList);
+        System.out.println(countList);
 
         Referer referer = Referer.newBuilder()
                 .setShortUrl(shortenUrl)
@@ -58,6 +71,14 @@ public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    private List<Integer> getCountListFromRefererCount(List<RefererVO> refererCountList) {
+        return refererCountList.stream().map(RefererVO::getCount).collect(Collectors.toList());
+    }
+
+    private List<String> getRefererListFromRefererCount(List<RefererVO> refererCountList) {
+        return refererCountList.stream().map(RefererVO::getReferer).collect(Collectors.toList());
+    }
+
     @Override
     public void getTotalCount(UrlStatsRequest request, StreamObserver<TotalCount> responseObserver) {
         String shortenUrl = request.getShortUrl();
@@ -66,10 +87,11 @@ public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
             responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
         }
 
-        // TODO now hardcoded (mybatis 로 디비 접근 구현)
+        TotalCountVO totalCountVO = totalCountService.findTotalCountByShortUrl(shortenUrl);
+
         TotalCount totalCount = TotalCount.newBuilder()
-                .setShortUrl(shortenUrl)
-                .setTotalCount(3)
+                .setShortUrl(totalCountVO.getShort_url())
+                .setTotalCount(totalCountVO.getTotal_count())
                 .build();
 
         responseObserver.onNext(totalCount);

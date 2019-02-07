@@ -3,10 +3,12 @@ package me.nexters.chopstatsapi.grpc;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * @author junho.park
  */
+@Service
 public class UrlClickService extends UrlClickServiceGrpc.UrlClickServiceImplBase {
     public static Logger logger = LoggerFactory.getLogger(UrlClickService.class);
 

@@ -1,22 +1,22 @@
 package me.nexters.chopstatsapi.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.domain.ClickDateVO;
 import me.nexters.chopstatsapi.domain.PlatformVO;
 import me.nexters.chopstatsapi.domain.RefererVO;
 import me.nexters.chopstatsapi.domain.TotalCountVO;
-import me.nexters.chopstatsapi.mapper.UrlClickMapper;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
 
 /**
  * @author junho.park
  */
 @Service
-@MapperScan({"me.nexters.chopstatsapi.mapper"})
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class UrlClickService {
-    @Autowired
-    private UrlClickMapper urlClickMapper;
+    private final UrlClickMapper urlClickMapper;
 
     public void insertClickTime(ClickDateVO clickDateVo) {
         urlClickMapper.insertClickTime(clickDateVo);

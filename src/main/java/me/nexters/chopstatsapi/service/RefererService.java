@@ -1,21 +1,21 @@
 package me.nexters.chopstatsapi.service;
 
-import me.nexters.chopstatsapi.domain.RefererVO;
-import me.nexters.chopstatsapi.mapper.RefererMapper;
-import org.mybatis.spring.annotation.MapperScan;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import me.nexters.chopstatsapi.domain.RefererVO;
+import me.nexters.chopstatsapi.repository.mapper.RefererMapper;
 
 /**
  * @author junho.park
  */
 @Service
-@MapperScan({"me.nexters.chopstatsapi.mapper"})
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class RefererService {
-    @Autowired
-    private RefererMapper refererMapper;
+    private final RefererMapper refererMapper;
 
     public List<RefererVO> findRefererByShortUrl(String shortUrl) {
         return refererMapper.findRefererByShortUrl(shortUrl);

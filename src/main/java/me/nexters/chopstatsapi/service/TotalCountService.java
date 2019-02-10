@@ -1,19 +1,19 @@
 package me.nexters.chopstatsapi.service;
 
-import me.nexters.chopstatsapi.domain.TotalCountVO;
-import me.nexters.chopstatsapi.mapper.TotalCountMapper;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import me.nexters.chopstatsapi.domain.TotalCountVO;
+import me.nexters.chopstatsapi.repository.mapper.TotalCountMapper;
 
 /**
  * @author junho.park
  */
 @Service
-@MapperScan({"me.nexters.chopstatsapi.mapper"})
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class TotalCountService {
-    @Autowired
-    private TotalCountMapper totalCountMapper;
+    private final TotalCountMapper totalCountMapper;
 
     public TotalCountVO findTotalCountByShortUrl(String shortUrl) {
         return totalCountMapper.findTotalCountByShortUrl(shortUrl);

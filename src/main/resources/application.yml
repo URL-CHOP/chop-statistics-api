@@ -1,19 +1,11 @@
 spring:
-  profiles:
-    active: local
-
----
-spring:
-  profiles: local
-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://statistics-bd.ci6m5mpn73xb.ap-northeast-2.rds.amazonaws.com:3306/statistics?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: nexters
+    password: nexters12
 server:
   port: 8081
 
----
-spring:
-  profiles: prod
-
-server:
-  port: 8080
 
 

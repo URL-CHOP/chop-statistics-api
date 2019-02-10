@@ -2,9 +2,8 @@ package me.nexters.chopstatsapi;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
-import me.nexters.chopstatsapi.grpc.StatsService;
-import me.nexters.chopstatsapi.grpc.UrlClickService;
+import me.nexters.chopstatsapi.grpc.StatsGrpcService;
+import me.nexters.chopstatsapi.grpc.UrlClickGrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,9 @@ public class ChopStatsApiApplication implements ApplicationRunner {
 
     public static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);
     @Autowired
-    private StatsService statsService;
+    private StatsGrpcService statsService;
     @Autowired
-    private UrlClickService urlClickService;
+    private UrlClickGrpcService urlClickService;
 
     public static void main(String[] args) {
         SpringApplication.run(ChopStatsApiApplication.class, args);

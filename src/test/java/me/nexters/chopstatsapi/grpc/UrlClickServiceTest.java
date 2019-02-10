@@ -37,7 +37,7 @@ public class UrlClickServiceTest {
         server = InProcessServerBuilder
                 .forName(serverName)
                 .directExecutor()
-                .addService(new UrlClickService()).build();
+                .addService(new UrlClickGrpcService()).build();
 
         server.start();
 

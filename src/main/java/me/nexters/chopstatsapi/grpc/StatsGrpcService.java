@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @author junho.park
  */
 @Service
-public class StatsService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
+public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
     @Autowired
     private PlatformService platformService;
     @Autowired

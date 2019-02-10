@@ -2,6 +2,7 @@ package me.nexters.chopstatsapi.grpc;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.domain.PlatformVO;
 import me.nexters.chopstatsapi.domain.RefererVO;
 import me.nexters.chopstatsapi.domain.TotalCountVO;
@@ -18,13 +19,11 @@ import java.util.stream.Collectors;
  * @author junho.park
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
-    @Autowired
-    private PlatformService platformService;
-    @Autowired
-    private RefererService refererService;
-    @Autowired
-    private TotalCountService totalCountService;
+    private final PlatformService platformService;
+    private final RefererService refererService;
+    private final TotalCountService totalCountService;
 
     @Override
     public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
@@ -37,7 +36,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         PlatformVO platformVO = platformService.getPlatformByShortUrl(shortenUrl);
 
         Platform platform = Platform.newBuilder()
-                .setShortUrl(platformVO.getShort_url())
+                .setShortUrl(shortenUrl)
                 .setBrowser(platformVO.getBrowser())
                 .setMobile(platformVO.getMobile())
                 .build();

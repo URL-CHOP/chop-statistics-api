@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 /**
  * @author junho.park
  */
@@ -11,10 +13,10 @@ import org.apache.ibatis.type.Alias;
 @Getter
 public class ClickDateVO {
     private String short_url;
-    private long click_time;
+    private Date click_time;
 
     @Builder
-    public ClickDateVO(String short_url, long click_time) {
+    public ClickDateVO(String short_url, Date click_time) {
         this.short_url = short_url;
         this.click_time = click_time;
     }

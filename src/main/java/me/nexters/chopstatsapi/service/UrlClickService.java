@@ -1,14 +1,11 @@
 package me.nexters.chopstatsapi.service;
 
+import lombok.RequiredArgsConstructor;
+import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import me.nexters.chopstatsapi.domain.ClickDateVO;
-import me.nexters.chopstatsapi.domain.PlatformVO;
-import me.nexters.chopstatsapi.domain.RefererVO;
-import me.nexters.chopstatsapi.domain.TotalCountVO;
-import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
+import java.util.Date;
 
 /**
  * @author junho.park
@@ -18,14 +15,23 @@ import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
 public class UrlClickService {
     private final UrlClickMapper urlClickMapper;
 
-    public void insertClickTime(ClickDateVO clickDateVo) {
-        urlClickMapper.insertClickTime(clickDateVo);
+    public void  insertTotalCount(String shortUrl) {
+        urlClickMapper.insertTotalCount(shortUrl);
     }
 
-    public void insertPlatform(PlatformVO platformVO) {
+    public void insertClickTime(String shortUrl, Date clickTime) {
+        urlClickMapper.insertClickTime(shortUrl, clickTime);
     }
-    public void insertReferer(RefererVO refererVO) {
+
+    public void insertPlatform(String shortUrl, String platform) {
+        if (platform.equals("mobile")) {
+            urlClickMapper.insertMobilePlatform(shortUrl);
+        } else if (platform.equals("browser")) {
+            urlClickMapper.insertBrowserPlatform(shortUrl);
+        }
     }
-    public void  insertTotalCount(TotalCountVO totalCountVO) {
+
+    public void insertReferer(String shortUrl, String referer) {
+        urlClickMapper.insertReferer(shortUrl, referer);
     }
 }

@@ -20,6 +20,6 @@ public class PlatformMapperTest {
 
     @Test
     public void test() {
-        System.out.println(platformMapper.findPlatformByShortUrl("Zb"));
+        System.out.println(platformMapper.getPlatformByShortUrl("Zb"));
     }
 }

@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import me.nexters.chopstatsapi.domain.ClickDateVO;
+import java.util.Date;
 
 /**
  * @author junho.park
@@ -12,6 +12,27 @@ import me.nexters.chopstatsapi.domain.ClickDateVO;
 @Repository
 @Mapper
 public interface UrlClickMapper {
-    @Insert("INSERT INTO click_count(short_url, click_time) VALUES(#{short_url}, #{click_time}")
-    void insertClickTime(ClickDateVO clickDateVO);
+    @Insert("INSERT INTO click_date(short_url, click_time) " +
+            "VALUES (#{param1}, #{param2})")
+    void insertClickTime(String shortUrl, Date date);
+
+    @Insert("INSERT INTO platform_count(short_url, mobile, browser) " +
+            "VALUES (#{param1}, 0, 0)" +
+            "ON DUPLICATE KEY UPDATE mobile = mobile + 1")
+    void insertMobilePlatform(String shortUrl);
+
+    @Insert("INSERT INTO platform_count(short_url, mobile, browser) " +
+            "VALUES (#{param1}, 0, 0)" +
+            "ON DUPLICATE KEY UPDATE browser = browser + 1")
+    void insertBrowserPlatform(String shortUrl);
+
+    @Insert("INSERT INTO referer_count(short_url, referer, count)" +
+            "VALUES (#{param1}, #{param2}, 0)" +
+            "ON DUPLICATE KEY UPDATE count = count + 1")
+    void insertReferer(String shortUrl, String referer);
+
+    @Insert("INSERT INTO total_count(short_url, total_count)" +
+            "VALUES (#{param1}, 0)" +
+            "ON DUPLICATE KEY UPDATE total_count = total_count + 1")
+    void insertTotalCount(String shortUrl);
 }

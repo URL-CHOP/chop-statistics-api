@@ -1,24 +1,24 @@
 package me.nexters.chopstatsapi.service;
 
+import me.nexters.chopstatsapi.domain.TotalCountVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author junho.park
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
-public class PlatformServiceTest {
+public class TotalCountServiceTest {
     @Autowired
-    PlatformService platformService;
+    TotalCountService totalCountService;
 
     @Test
-    public void getPlatformByShortUrl() {
-        System.out.println(platformService.getPlatformByShortUrl("Zb"));
+    public void getTotalCountByShortUrl() {
+        TotalCountVO totalCountVO = totalCountService.getTotalCountByShortUrl("Zb");
+        System.out.println(totalCountVO.getTotal_count());
     }
 }

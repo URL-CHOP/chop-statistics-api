@@ -53,7 +53,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
             responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
         }
 
-        List<RefererVO> refererVOList = refererService.findRefererByShortUrl(shortenUrl);
+        List<RefererVO> refererVOList = refererService.getRefererByShortUrl(shortenUrl);
         List<String> refererList = getRefererListFromRefererCount(refererVOList);
         List<Integer> countList = getCountListFromRefererCount(refererVOList);
 
@@ -86,7 +86,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
             responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
         }
 
-        TotalCountVO totalCountVO = totalCountService.findTotalCountByShortUrl(shortenUrl);
+        TotalCountVO totalCountVO = totalCountService.getTotalCountByShortUrl(shortenUrl);
 
         TotalCount totalCount = TotalCount.newBuilder()
                 .setShortUrl(totalCountVO.getShort_url())

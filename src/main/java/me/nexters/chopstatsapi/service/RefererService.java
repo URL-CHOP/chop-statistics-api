@@ -17,7 +17,7 @@ import me.nexters.chopstatsapi.repository.mapper.RefererMapper;
 public class RefererService {
     private final RefererMapper refererMapper;
 
-    public List<RefererVO> findRefererByShortUrl(String shortUrl) {
-        return refererMapper.findRefererByShortUrl(shortUrl);
+    public List<RefererVO> getRefererByShortUrl(String shortUrl) {
+        return refererMapper.getRefererByShortUrl(shortUrl);
     }
 }

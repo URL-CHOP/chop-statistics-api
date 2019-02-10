@@ -16,5 +16,5 @@ import me.nexters.chopstatsapi.domain.RefererVO;
 @Mapper
 public interface RefererMapper {
     @Select("SELECT * FROM referer_count WHERE short_url = #{shortUrl}")
-    List<RefererVO> findRefererByShortUrl(@Param("shortUrl") String shortUrl);
+    List<RefererVO> getRefererByShortUrl(@Param("shortUrl") String shortUrl);
 }

@@ -15,7 +15,7 @@ import me.nexters.chopstatsapi.repository.mapper.TotalCountMapper;
 public class TotalCountService {
     private final TotalCountMapper totalCountMapper;
 
-    public TotalCountVO findTotalCountByShortUrl(String shortUrl) {
-        return totalCountMapper.findTotalCountByShortUrl(shortUrl);
+    public TotalCountVO getTotalCountByShortUrl(String shortUrl) {
+        return totalCountMapper.getTotalCountByShortUrl(shortUrl);
     }
 }

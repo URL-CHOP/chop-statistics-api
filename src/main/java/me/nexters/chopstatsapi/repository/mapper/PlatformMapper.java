@@ -14,5 +14,5 @@ import me.nexters.chopstatsapi.domain.PlatformVO;
 @Mapper
 public interface PlatformMapper {
     @Select("SELECT * FROM platform_count WHERE short_url = #{shortUrl}")
-    PlatformVO findPlatformByShortUrl(@Param("shortUrl") String shortUrl);
+    PlatformVO getPlatformByShortUrl(@Param("shortUrl") String shortUrl);
 }

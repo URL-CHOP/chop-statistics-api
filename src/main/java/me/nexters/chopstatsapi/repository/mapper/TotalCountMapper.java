@@ -14,5 +14,5 @@ import me.nexters.chopstatsapi.domain.TotalCountVO;
 @Mapper
 public interface TotalCountMapper {
     @Select("SELECT * FROM total_count WHERE short_url = #{shortUrl}")
-    TotalCountVO findTotalCountByShortUrl(@Param("shortUrl") String shortUrl);
+    TotalCountVO getTotalCountByShortUrl(@Param("shortUrl") String shortUrl);
 }

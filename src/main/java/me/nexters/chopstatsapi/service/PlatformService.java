@@ -16,6 +16,6 @@ public class PlatformService {
     private final PlatformMapper platformMapper;
 
     public PlatformVO getPlatformByShortUrl(String shortUrl) {
-        return platformMapper.findPlatformByShortUrl(shortUrl);
+        return platformMapper.getPlatformByShortUrl(shortUrl);
     }
 }

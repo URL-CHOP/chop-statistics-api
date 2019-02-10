@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author junho.park
@@ -54,28 +53,18 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         }
 
         List<RefererVO> refererVOList = refererService.getRefererByShortUrl(shortenUrl);
-        List<String> refererList = getRefererListFromRefererCount(refererVOList);
-        List<Integer> countList = getCountListFromRefererCount(refererVOList);
 
-        System.out.println(refererList);
-        System.out.println(countList);
+        for (RefererVO refererVO : refererVOList) {
+            Referer referer = Referer.newBuilder()
+                    .setShortUrl(shortenUrl)
+                    .setReferer(refererVO.getReferer())
+                    .setCount(refererVO.getCount())
+                    .build();
 
-        Referer referer = Referer.newBuilder()
-                .setShortUrl(shortenUrl)
-                .addAllReferer(refererList)
-                .addAllCount(countList)
-                .build();
+            responseObserver.onNext(referer);
+        }
 
-        responseObserver.onNext(referer);
         responseObserver.onCompleted();
-    }
-
-    private List<Integer> getCountListFromRefererCount(List<RefererVO> refererCountList) {
-        return refererCountList.stream().map(RefererVO::getCount).collect(Collectors.toList());
-    }
-
-    private List<String> getRefererListFromRefererCount(List<RefererVO> refererCountList) {
-        return refererCountList.stream().map(RefererVO::getReferer).collect(Collectors.toList());
     }
 
     @Override
@@ -89,7 +78,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         TotalCountVO totalCountVO = totalCountService.getTotalCountByShortUrl(shortenUrl);
 
         TotalCount totalCount = TotalCount.newBuilder()
-                .setShortUrl(totalCountVO.getShort_url())
+                .setShortUrl(shortenUrl)
                 .setTotalCount(totalCountVO.getTotal_count())
                 .build();
 

@@ -3,14 +3,14 @@ package me.nexters.chopstatsapi.domain;
 import lombok.Getter;
 import org.apache.ibatis.type.Alias;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 /**
  * @author junho.park
  */
-@Alias("total_count")
+@Alias("click_date")
 @Getter
 public class ClickDateVO {
-    private String shortUrl;
-    private LocalDateTime clickTime;
+    private Date clickDate;
+    private int count;
 }

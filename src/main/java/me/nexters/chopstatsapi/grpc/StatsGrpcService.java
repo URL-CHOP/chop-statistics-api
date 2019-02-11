@@ -79,7 +79,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
         TotalCount totalCount = TotalCount.newBuilder()
                 .setShortUrl(shortenUrl)
-                .setTotalCount(totalCountVO.getTotal_count())
+                .setTotalCount(totalCountVO.getTotalCount())
                 .build();
 
         responseObserver.onNext(totalCount);

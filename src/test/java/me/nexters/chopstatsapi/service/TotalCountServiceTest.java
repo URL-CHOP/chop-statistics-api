@@ -19,6 +19,6 @@ public class TotalCountServiceTest {
     @Test
     public void getTotalCountByShortUrl() {
         TotalCountVO totalCountVO = totalCountService.getTotalCountByShortUrl("Zb");
-        System.out.println(totalCountVO.getTotal_count());
+        System.out.println(totalCountVO.getTotalCount());
     }
 }

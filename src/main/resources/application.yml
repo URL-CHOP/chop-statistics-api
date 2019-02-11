@@ -4,10 +4,15 @@ datasource:
     username: nexters
     password: nexters12
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
 ---
 
 server:
   port: 8081
+
 
 
 

@@ -2,6 +2,7 @@ package me.nexters.chopstatsapi;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.grpc.StatsGrpcService;
 import me.nexters.chopstatsapi.grpc.UrlClickGrpcService;
 import org.slf4j.Logger;
@@ -12,31 +13,41 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class ChopStatsApiApplication implements ApplicationRunner {
+import java.io.IOException;
 
-    public static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);
-    @Autowired
-    private StatsGrpcService statsService;
-    @Autowired
-    private UrlClickGrpcService urlClickService;
+@SpringBootApplication
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+public class ChopStatsApiApplication implements ApplicationRunner {
+    private static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);
+    private final StatsGrpcService statsService;
+    private final UrlClickGrpcService urlClickService;
 
     public static void main(String[] args) {
         SpringApplication.run(ChopStatsApiApplication.class, args);
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        // TODO 테스트 시 gRPC 서버 생성하는 부분에서 문제가 생김 (일단 주석처리)
-        Server server = ServerBuilder
-                .forPort(6565)
-                .addService(urlClickService)
-                .addService(statsService)
-                .build();
+    public void run(ApplicationArguments args) {
+        new Thread(() -> {
+            Server server = ServerBuilder
+                    .forPort(6565)
+                    .addService(urlClickService)
+                    .addService(statsService)
+                    .build();
+            try {
+                server.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        server.start();
-        logger.info("gRPC server running!");
-        server.awaitTermination();
+            logger.info("gRPC server running!");
+
+            try {
+                server.awaitTermination();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }
 

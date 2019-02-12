@@ -1,30 +1,31 @@
 package me.nexters.chopstatsapi.grpc;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.UUID;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.stub.StreamObserver;
 import io.grpc.testing.GrpcCleanupRule;
+import me.nexters.chopstatsapi.repository.UrlClickRepository;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
  * @author junho.park
  */
-@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
-public class UrlClickServiceTest {
+public class UrlClickGrpcServiceTest {
     @Rule
     public final GrpcCleanupRule grpcCleanup = new GrpcCleanupRule();
 
@@ -32,13 +33,16 @@ public class UrlClickServiceTest {
 
     private Server server;
 
+    @Autowired
+    private UrlClickRepository urlClickRepository;
+
     @Before
     public void setUp() throws Exception {
         String serverName = UUID.randomUUID().toString();
         server = InProcessServerBuilder
                 .forName(serverName)
                 .directExecutor()
-                .addService(new UrlClickGrpcService()).build();
+                .addService(new UrlClickGrpcService(urlClickRepository)).build();
 
         server.start();
 

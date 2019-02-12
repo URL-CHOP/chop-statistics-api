@@ -39,7 +39,7 @@ public class ChopStatsApiApplication implements ApplicationRunner {
             try {
                 server.start();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
 
             logger.info("gRPC server running!");
@@ -47,7 +47,7 @@ public class ChopStatsApiApplication implements ApplicationRunner {
             try {
                 server.awaitTermination();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }).start();
     }

@@ -22,7 +22,17 @@ public class ClickDateRepositoryTest {
 
     @Test
     public void getClickDatePerWeekByShortUrl() {
-        List<ClickDateVO> list = clickDateRepository.getClickDatePerWeekByShortUrl("Zb", 1);
+        List<ClickDateVO> list = clickDateRepository.getClickDatePerWeekByShortUrl("a", 1);
+
+        for(ClickDateVO vo : list) {
+            System.out.println(vo.getCount());
+            System.out.println(vo.getClickDate());
+        }
+    }
+
+    @Test
+    public void getClickDatePerMonthByShortUrl() {
+        List<ClickDateVO> list = clickDateRepository.getClickDatePerMonthByShortUrl("a", 1);
 
         for(ClickDateVO vo : list) {
             System.out.println(vo.getCount());

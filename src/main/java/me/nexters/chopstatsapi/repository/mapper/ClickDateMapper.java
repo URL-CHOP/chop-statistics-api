@@ -17,7 +17,14 @@ public interface ClickDateMapper {
     @Select("SELECT DATE_FORMAT(click_time, '%Y-%m-%d') AS click_date, count(*) AS count " +
             "FROM click_date " +
             "WHERE short_url = #{shortUrl} " +
-            "GROUP BY DATE(click_time) " +
-            "AND click_date > (NOW() - INTERVAL #{week} WEEK)")
+            "AND click_time > NOW() - INTERVAL #{week} WEEK " +
+            "GROUP BY click_date")
     List<ClickDateVO> getClickDatePerWeekByShortUrl(@Param("shortUrl") String shortUrl, @Param("week") int week);
+
+    @Select("SELECT DATE_FORMAT(click_time, '%Y-%m-%d') AS click_date, count(*) AS count " +
+            "FROM click_date " +
+            "WHERE short_url = #{shortUrl} " +
+            "AND click_time > NOW() - INTERVAL #{month} MONTH " +
+            "GROUP BY click_date")
+    List<ClickDateVO> getClickDatePerMonthByShortUrl(@Param("shortUrl") String shortUrl, @Param("month") int month);
 }

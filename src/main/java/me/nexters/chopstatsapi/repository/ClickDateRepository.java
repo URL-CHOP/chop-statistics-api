@@ -19,4 +19,8 @@ public class ClickDateRepository {
     public List<ClickDateVO> getClickDatePerWeekByShortUrl(String shortUrl, int week) {
         return clickDateMapper.getClickDatePerWeekByShortUrl(shortUrl, week);
     }
+
+    public List<ClickDateVO> getClickDatePerMonthByShortUrl(String shortUrl, int month) {
+        return clickDateMapper.getClickDatePerMonthByShortUrl(shortUrl, month);
+    }
 }

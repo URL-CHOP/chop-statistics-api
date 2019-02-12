@@ -2,36 +2,54 @@ package me.nexters.chopstatsapi;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import me.nexters.chopstatsapi.grpc.StatsService;
-import me.nexters.chopstatsapi.grpc.UrlClickService;
+import lombok.RequiredArgsConstructor;
+import me.nexters.chopstatsapi.grpc.StatsGrpcService;
+import me.nexters.chopstatsapi.grpc.UrlClickGrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+
 @SpringBootApplication
 @EnableRabbit
-public class ChopStatsApiApplication implements ApplicationRunner{
-    public static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+public class ChopStatsApiApplication implements ApplicationRunner {
+    private static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);
+    private final StatsGrpcService statsService;
+    private final UrlClickGrpcService urlClickService;
 
     public static void main(String[] args) {
         SpringApplication.run(ChopStatsApiApplication.class, args);
     }
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        Server server = ServerBuilder
-                .forPort(6565)
-                .addService(new UrlClickService())
-                .addService(new StatsService())
-                .build();
+    public void run(ApplicationArguments args) {
+        new Thread(() -> {
+            Server server = ServerBuilder
+                    .forPort(6565)
+                    .addService(urlClickService)
+                    .addService(statsService)
+                    .build();
+            try {
+                server.start();
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
 
-        server.start();
-        logger.info("gRPC server running!");
-        server.awaitTermination();
+            logger.info("gRPC server running!");
+
+            try {
+                server.awaitTermination();
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage());
+            }
+        }).start();
     }
 }
 

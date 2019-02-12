@@ -1,19 +1,18 @@
-spring:
-  profiles:
-    active: local
+datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://statistics-bd.ci6m5mpn73xb.ap-northeast-2.rds.amazonaws.com:3306/statistics?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: nexters
+    password: nexters12
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 ---
-spring:
-  profiles: local
 
 server:
   port: 8081
 
----
-spring:
-  profiles: prod
 
-server:
-  port: 8080
 
 

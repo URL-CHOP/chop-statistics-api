@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 
 @SpringBootApplication
+@EnableRabbit
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class ChopStatsApiApplication implements ApplicationRunner {
     private static Logger logger = LoggerFactory.getLogger(ChopStatsApiApplication.class);

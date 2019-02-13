@@ -8,6 +8,8 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+grpc:
+  port: 6565
 ---
 
 server:

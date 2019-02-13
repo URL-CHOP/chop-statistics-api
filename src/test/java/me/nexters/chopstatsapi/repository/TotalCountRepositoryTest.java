@@ -1,5 +1,6 @@
 package me.nexters.chopstatsapi.repository;
 
+import me.nexters.chopstatsapi.domain.TotalCountVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PlatformRepositoryTest {
+public class TotalCountRepositoryTest {
     @Autowired
-    PlatformRepository platformRepository;
+    TotalCountRepository totalCountRepository;
 
     @Test
-    public void getPlatformByShortUrl() {
-        assertThat(platformRepository.getPlatformByShortUrl("a").getMobile()).isNotNull();
-        assertThat(platformRepository.getPlatformByShortUrl("a").getBrowser()).isNotNull();
+    public void getTotalCountByShortUrl() {
+        TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl("a");
+        assertThat(totalCountVO.getTotalCount()).isNotNull();
     }
 }

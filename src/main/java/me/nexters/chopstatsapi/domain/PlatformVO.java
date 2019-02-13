@@ -9,7 +9,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("platform_count")
 @Getter
 public class PlatformVO {
-    private String shortUrl;
     private int mobile;
     private int browser;
 }

@@ -29,15 +29,14 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
 
         String shortUrl = request.getShortUrl();
 
-        // 비동기 확인 할 때는 이쪽에 Thread sleep 주면 됨
         // TODO Queue insert & referer, totalcount, platform
         urlClickRepository.insertClickTime(shortUrl, new Date());
 
-        // TODO platform 정규식
-        //urlClickService.insertPlatform(shortUrl, request.getPlatform());
+        // TODO platform 정규식 - 정규식 util 합치면 됨
+        urlClickRepository.insertPlatform(shortUrl, "browser");
 
         // TODO referer 정규식
-        //urlClickService.insertReferer(shortUrl, request.getReferer());
+        urlClickRepository.insertReferer(shortUrl, request.getReferer());
 
         urlClickRepository.insertTotalCount(shortUrl);
 

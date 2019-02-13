@@ -40,7 +40,6 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         PlatformVO platformVO = platformRepository.getPlatformByShortUrl(shortenUrl);
 
         Platform platform = Platform.newBuilder()
-                .setShortUrl(shortenUrl)
                 .setBrowser(platformVO.getBrowser())
                 .setMobile(platformVO.getMobile())
                 .build();
@@ -61,7 +60,6 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
         for (RefererVO refererVO : refererVOList) {
             Referer referer = Referer.newBuilder()
-                    .setShortUrl(shortenUrl)
                     .setReferer(refererVO.getReferer())
                     .setCount(refererVO.getCount())
                     .build();
@@ -83,7 +81,6 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(shortenUrl);
 
         TotalCount totalCount = TotalCount.newBuilder()
-                .setShortUrl(shortenUrl)
                 .setTotalCount(totalCountVO.getTotalCount())
                 .build();
 

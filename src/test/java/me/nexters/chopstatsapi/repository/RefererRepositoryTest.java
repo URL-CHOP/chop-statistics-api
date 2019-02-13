@@ -1,4 +1,4 @@
-package me.nexters.chopstatsapi.service;
+package me.nexters.chopstatsapi.repository;
 
 import me.nexters.chopstatsapi.domain.RefererVO;
 import org.junit.Test;
@@ -6,26 +6,26 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author junho.park
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Transactional
-public class RefererServiceTest {
+public class RefererRepositoryTest {
     @Autowired
-    RefererService refererService;
+    RefererRepository refererRepository;
 
     @Test
     public void getRefererByShortUrl() {
-        List<RefererVO> refererVOList = refererService.getRefererByShortUrl("Zb");
+        List<RefererVO> refererVOList = refererRepository.getRefererByShortUrl("a");
         for (RefererVO refererVO : refererVOList) {
-            System.out.println(refererVO.getReferer());
-            System.out.println(refererVO.getCount());
+            assertThat(refererVO.getReferer()).isNotEmpty();
+            assertThat(refererVO.getCount()).isNotNull();
         }
     }
 }

@@ -9,7 +9,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("referer_count")
 @Getter
 public class RefererVO {
-    private String shortUrl;
     private String referer;
     private int count;
 }

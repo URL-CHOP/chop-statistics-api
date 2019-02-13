@@ -1,4 +1,4 @@
-package me.nexters.chopstatsapi.service;
+package me.nexters.chopstatsapi.repository;
 
 import me.nexters.chopstatsapi.domain.TotalCountVO;
 import org.junit.Test;
@@ -7,18 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author junho.park
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TotalCountServiceTest {
+public class TotalCountRepositoryTest {
     @Autowired
-    TotalCountService totalCountService;
+    TotalCountRepository totalCountRepository;
 
     @Test
     public void getTotalCountByShortUrl() {
-        TotalCountVO totalCountVO = totalCountService.getTotalCountByShortUrl("Zb");
-        System.out.println(totalCountVO.getTotalCount());
+        TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl("a");
+        assertThat(totalCountVO.getTotalCount()).isNotNull();
     }
 }

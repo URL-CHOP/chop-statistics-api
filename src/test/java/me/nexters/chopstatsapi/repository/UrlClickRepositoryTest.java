@@ -1,4 +1,4 @@
-package me.nexters.chopstatsapi.service;
+package me.nexters.chopstatsapi.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,29 +13,29 @@ import java.util.Date;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UrlClickServiceTest {
+public class UrlClickRepositoryTest {
     @Autowired
-    UrlClickService urlClickService;
+    UrlClickRepository urlClickRepository;
 
     @Test
     public void insertClickTime() {
-        urlClickService.insertClickTime("Zb", new Date());
+        urlClickRepository.insertClickTime("a", new Date());
     }
 
     @Test
     public void insertTotalCount() {
-        urlClickService.insertTotalCount("Zb");
+        urlClickRepository.insertTotalCount("a");
     }
 
     @Test
     public void insertPlatform() {
-        urlClickService.insertPlatform("Zb", "mobile");
-        urlClickService.insertPlatform("Zb", "browser");
+        urlClickRepository.insertPlatform("a", "mobile");
+        urlClickRepository.insertPlatform("a", "browser");
     }
 
     @Test
     public void insertReferer() {
-        urlClickService.insertReferer("Zb", "https://google.com");
-        urlClickService.insertReferer("Zb", "https://daum.net");
+        urlClickRepository.insertReferer("a", "https://google.com");
+        urlClickRepository.insertReferer("a", "https://daum.net");
     }
 }

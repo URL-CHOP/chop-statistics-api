@@ -12,8 +12,8 @@ import me.nexters.chopstatsapi.repository.ClickDateRepository;
 import me.nexters.chopstatsapi.repository.PlatformRepository;
 import me.nexters.chopstatsapi.repository.RefererRepository;
 import me.nexters.chopstatsapi.repository.TotalCountRepository;
+import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author junho.park
  */
-@Service
+@GRpcService
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
     private final PlatformRepository platformRepository;

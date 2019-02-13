@@ -3,17 +3,17 @@ package me.nexters.chopstatsapi.grpc;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.repository.UrlClickRepository;
+import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 /**
  * @author junho.park
  */
-@Service
+@GRpcService
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImplBase {
     public static Logger logger = LoggerFactory.getLogger(UrlClickGrpcService.class);

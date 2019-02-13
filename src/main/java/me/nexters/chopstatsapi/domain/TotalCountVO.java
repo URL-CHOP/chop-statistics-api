@@ -9,6 +9,5 @@ import org.apache.ibatis.type.Alias;
 @Alias("total_count")
 @Getter
 public class TotalCountVO {
-    private String shortUrl;
     private int totalCount;
 }

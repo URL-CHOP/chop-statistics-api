@@ -34,10 +34,16 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         String shortenUrl = request.getShortUrl();
 
         if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
+            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
+            throw new NullPointerException("url이 null 입니다");
         }
 
         PlatformVO platformVO = platformRepository.getPlatformByShortUrl(shortenUrl);
+
+        if (platformVO == null) {
+            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
+            throw new RuntimeException("존재하지 않는 url 입니다");
+        }
 
         Platform platform = Platform.newBuilder()
                 .setBrowser(platformVO.getBrowser())
@@ -53,10 +59,16 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         String shortenUrl = request.getShortUrl();
 
         if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
+            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
+            throw new NullPointerException("url이 null 입니다");
         }
 
         List<RefererVO> refererVOList = refererRepository.getRefererByShortUrl(shortenUrl);
+
+        if (refererVOList.get(0) == null) {
+            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
+            throw new RuntimeException("존재하지 않는 url 입니다");
+        }
 
         for (RefererVO refererVO : refererVOList) {
             Referer referer = Referer.newBuilder()
@@ -75,10 +87,16 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         String shortenUrl = request.getShortUrl();
 
         if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
+            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
+            throw new NullPointerException("url이 null 입니다");
         }
 
         TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(shortenUrl);
+
+        if (totalCountVO == null) {
+            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
+            throw new RuntimeException("존재하지 않는 url 입니다");
+        }
 
         TotalCount totalCount = TotalCount.newBuilder()
                 .setTotalCount(totalCountVO.getTotalCount())
@@ -94,10 +112,16 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
         int week = request.getWeek();
 
         if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("shortenURL null").asException());
+            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
+            throw new NullPointerException("url이 null 입니다");
         }
 
         List<ClickDateVO> clickDateVOList = clickDateRepository.getClickDatePerWeekByShortUrl(shortenUrl, week);
+
+        if (clickDateVOList.get(0) == null) {
+            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
+            throw new RuntimeException("존재하지 않는 url 입니다");
+        }
 
         for (ClickDateVO clickDateVO : clickDateVOList) {
             ClickCount clickCount = ClickCount.newBuilder()

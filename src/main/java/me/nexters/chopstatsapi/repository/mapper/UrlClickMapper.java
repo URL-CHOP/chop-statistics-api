@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
 public interface UrlClickMapper {
     @Insert("INSERT INTO click_date(short_url, click_time) " +
             "VALUES (#{param1}, #{param2})")
-    void insertClickTime(String shortUrl, Date date);
+    void insertClickTime(String shortUrl, LocalDateTime date);
 
     @Insert("INSERT INTO platform_count(short_url, mobile, browser) " +
             "VALUES (#{param1}, 0, 0)" +

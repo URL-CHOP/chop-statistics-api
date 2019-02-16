@@ -3,7 +3,14 @@ package me.nexters.chopstatsapi.grpc;
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
-import me.nexters.chopstatsapi.repository.UrlClickRepository;
+import me.nexters.chopstatsapi.grpc.util.PlatformUtil;
+import me.nexters.chopstatsapi.grpc.util.RefererUtil;
+import me.nexters.chopstatsapi.rabbitmq.QueueManager;
+import me.nexters.chopstatsapi.rabbitmq.model.ClickDateCount;
+import me.nexters.chopstatsapi.rabbitmq.model.PlatformCount;
+import me.nexters.chopstatsapi.rabbitmq.model.RefererCount;
+import me.nexters.chopstatsapi.rabbitmq.model.TotalCount;
+import me.nexters.chopstatsapi.rabbitmq.producer.Producer;
 import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +27,7 @@ import java.time.ZoneOffset;
 public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImplBase {
     public static Logger logger = LoggerFactory.getLogger(UrlClickGrpcService.class);
 
-    private final UrlClickRepository urlClickRepository;
+    private final Producer producer;
 
     @Override
     public void unaryRecordCount(Url request, StreamObserver<Success> responseObserver) {
@@ -30,20 +37,16 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
         logger.info("click time from client : " + request.getClickTime());
         Timestamp timestamp = request.getClickTime();
 
-        LocalDateTime dt = LocalDateTime.ofEpochSecond(timestamp.getSeconds(), 0, ZoneOffset.MAX);
         String shortUrl = request.getShortUrl();
 
-        // TODO Queue insert & referer, totalcount, platform
-        urlClickRepository.insertClickTime(shortUrl, dt);
-
-        // TODO platform 정규식 - 정규식 util 합치면 됨
-        urlClickRepository.insertPlatform(shortUrl, "browser");
-        // producer.enqueue(routingket, new
-
-        // TODO referer 정규식
-        urlClickRepository.insertReferer(shortUrl, request.getReferer());
-
-        urlClickRepository.insertTotalCount(shortUrl);
+        producer.enqueue(QueueManager.CLICK_DATE.getRoutingKey(),
+                new ClickDateCount(shortUrl, timestamp.getSeconds()));
+        producer.enqueue(QueueManager.PLATFORM_COUNT.getRoutingKey(),
+                new PlatformCount(shortUrl, PlatformUtil.checkMobile(request.getPlatform())));
+        producer.enqueue(QueueManager.REFERRER_COUNT.getRoutingKey(),
+                new RefererCount(shortUrl, RefererUtil.checkReferer(request.getReferer())));
+        producer.enqueue(QueueManager.TOTAL_COUNT.getRoutingKey(),
+                new TotalCount(shortUrl));
 
         Success success = Success.newBuilder().setMessage("save success : " + request.getShortUrl()).build();
 

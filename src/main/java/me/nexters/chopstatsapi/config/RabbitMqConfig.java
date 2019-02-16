@@ -1,14 +1,13 @@
 package me.nexters.chopstatsapi.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import me.nexters.chopstatsapi.rabbitmq.exception.ExceptionStrategy;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.RetryPolicy;
@@ -17,7 +16,8 @@ import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.util.ErrorHandler;
 
-import me.nexters.chopstatsapi.rabbitmq.exception.ExceptionStrategy;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author manki.kim
@@ -83,7 +83,7 @@ public class RabbitMqConfig {
 	 */
 	@Bean(name = {"listenerContainerFactory"})
 	public SimpleRabbitListenerContainerFactory containerFactory(ConnectionFactory connectionFactory,
-		Jackson2JsonMessageConverter messageConverter) {
+		MessageConverter messageConverter) {
 		SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
 		factory.setConnectionFactory(connectionFactory);
 		factory.setMessageConverter(messageConverter);
@@ -92,7 +92,7 @@ public class RabbitMqConfig {
 	}
 
 	@Bean
-	public Jackson2JsonMessageConverter messageConverter() {
+	public MessageConverter messageConverter() {
 		return new Jackson2JsonMessageConverter();
 	}
 

@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class TotalCount {
+public class ClickDateCount {
 	private String shortUrl;
+	private long dateSeconds;
 }

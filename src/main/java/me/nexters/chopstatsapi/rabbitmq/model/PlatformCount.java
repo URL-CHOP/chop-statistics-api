@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class TotalCount {
+public class PlatformCount {
 	private String shortUrl;
+	private String platform;
 }

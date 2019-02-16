@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -20,7 +21,7 @@ public class UrlClickRepository {
 		urlClickMapper.insertTotalCount(shortUrl);
 	}
 
-	public void insertClickTime(String shortUrl, Date clickTime) {
+	public void insertClickTime(String shortUrl, LocalDateTime clickTime) {
 		urlClickMapper.insertClickTime(shortUrl, clickTime);
 	}
 

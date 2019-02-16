@@ -1,5 +1,6 @@
 package me.nexters.chopstatsapi.grpc;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.ManagedChannel;
 import io.grpc.Server;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,7 +57,7 @@ public class UrlClickGrpcServiceTest {
     @Test
     public void unaryRecordCount() {
         Url url1 = Url.newBuilder()
-                .setClickTime(100000)
+                .setClickTime(Timestamp.newBuilder())
                 .setShortUrl("a")
                 .setReferer("https://www.facebook.com")
                 .setPlatform("mobile")

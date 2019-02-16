@@ -1,5 +1,6 @@
 package me.nexters.chopstatsapi.grpc;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.repository.UrlClickRepository;
@@ -8,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * @author junho.park
@@ -26,11 +28,13 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
         logger.info("referrer from client : " + request.getReferer());
         logger.info("platform from client : " + request.getPlatform());
         logger.info("click time from client : " + request.getClickTime());
+        Timestamp timestamp = request.getClickTime();
 
+        LocalDateTime dt = LocalDateTime.ofEpochSecond(timestamp.getSeconds(), 0, ZoneOffset.MAX);
         String shortUrl = request.getShortUrl();
 
         // TODO Queue insert & referer, totalcount, platform
-        urlClickRepository.insertClickTime(shortUrl, new Date());
+        urlClickRepository.insertClickTime(shortUrl, dt);
 
         // TODO platform 정규식 - 정규식 util 합치면 됨
         urlClickRepository.insertPlatform(shortUrl, "browser");

@@ -28,6 +28,22 @@ public class ProducerTest {
 		}
 	}
 
+	@Test
+	public void producePlatform() {
+		for (int i = 0; i < 10; i++) {
+			producer.enqueue("platform_count", "hi " + new Date());
+			sleep();
+		}
+	}
+
+	@Test
+	public void produceTotalCount() {
+		for (int i = 0; i < 10; i++) {
+			producer.enqueue("total_count", "hi " + new Date());
+			sleep();
+		}
+	}
+
 	private void sleep() {
 		try {
 			Thread.sleep(3000);

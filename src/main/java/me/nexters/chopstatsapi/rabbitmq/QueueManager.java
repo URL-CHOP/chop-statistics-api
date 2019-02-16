@@ -4,7 +4,10 @@ package me.nexters.chopstatsapi.rabbitmq;
  * @author manki.kim
  */
 public enum QueueManager {
-	CLICK_DATE("click-date", "click_date");
+	CLICK_DATE("click-date", "click_date"),
+	PLATFORM_COUNT("platform-count", "platform_count"),
+	REFERRER_COUNT("referrer-count", "referrer_count"),
+	TOTAL_COUNT("total-count", "total_count");
 
 	private String name;
 	private String routingKey;

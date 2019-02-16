@@ -46,4 +46,37 @@ public class QueueConfig {
 		return BindingBuilder.bind(clickDateQueue).to(exchange).with(
 			QueueManager.CLICK_DATE.getRoutingKey());
 	}
+
+	@Bean
+	public Queue platformCountQueue() {
+		return new Queue(QueueManager.PLATFORM_COUNT.getQueueName(), true);
+	}
+
+	@Bean
+	public Binding platformCountBinding(Queue platformCountQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(platformCountQueue).to(exchange).with(
+			QueueManager.PLATFORM_COUNT.getRoutingKey());
+	}
+
+	@Bean
+	public Queue referrerCountQueue() {
+		return new Queue(QueueManager.REFERRER_COUNT.getQueueName(), true);
+	}
+
+	@Bean
+	public Binding referrerCountBinding(Queue referrerCountQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(referrerCountQueue).to(exchange).with(
+			QueueManager.REFERRER_COUNT.getRoutingKey());
+	}
+
+	@Bean
+	public Queue totalCountQueue() {
+		return new Queue(QueueManager.TOTAL_COUNT.getQueueName(), true);
+	}
+
+	@Bean
+	public Binding totalCountBinding(Queue totalCountQueue, TopicExchange exchange) {
+		return BindingBuilder.bind(totalCountQueue).to(exchange).with(
+			QueueManager.TOTAL_COUNT.getRoutingKey());
+	}
 }

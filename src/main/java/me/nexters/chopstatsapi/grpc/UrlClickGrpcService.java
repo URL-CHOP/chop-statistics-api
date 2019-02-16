@@ -34,6 +34,7 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
 
         // TODO platform 정규식 - 정규식 util 합치면 됨
         urlClickRepository.insertPlatform(shortUrl, "browser");
+        // producer.enqueue(routingket, new
 
         // TODO referer 정규식
         urlClickRepository.insertReferer(shortUrl, request.getReferer());

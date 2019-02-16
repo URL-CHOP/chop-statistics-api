@@ -1,12 +1,11 @@
 package me.nexters.chopstatsapi.rabbitmq.producer;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author manki.kim
@@ -25,4 +24,5 @@ public class Producer {
 			log.error("error in produce {} ", routingKey, e);
 		}
 	}
+
 }

@@ -6,12 +6,12 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.domain.ClickDateVO;
 import me.nexters.chopstatsapi.domain.PlatformVO;
-import me.nexters.chopstatsapi.domain.ReferrerVO;
+import me.nexters.chopstatsapi.domain.RefererVO;
 import me.nexters.chopstatsapi.domain.TotalCountVO;
 import me.nexters.chopstatsapi.grpc.error.UrlErrorHandler;
 import me.nexters.chopstatsapi.repository.ClickDateRepository;
 import me.nexters.chopstatsapi.repository.PlatformRepository;
-import me.nexters.chopstatsapi.repository.ReferrerRepository;
+import me.nexters.chopstatsapi.repository.RefererRepository;
 import me.nexters.chopstatsapi.repository.TotalCountRepository;
 
 import org.lognet.springboot.grpc.GRpcService;
@@ -30,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
 	private final PlatformRepository platformRepository;
-	private final ReferrerRepository referrerRepository;
+	private final RefererRepository referrerRepository;
 	private final TotalCountRepository totalCountRepository;
 	private final ClickDateRepository clickDateRepository;
 
@@ -52,7 +52,7 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	@Override
 	public void getRefererCount(UrlStatsRequest request, StreamObserver<Referer> responseObserver) {
-		List<ReferrerVO> referrers = referrerRepository.getRefererByShortUrl(request.getShortUrl());
+		List<RefererVO> referrers = referrerRepository.getRefererByShortUrl(request.getShortUrl());
 		if (CollectionUtils.isEmpty(referrers)) {
 			throwNotFoundException(responseObserver);
 		}

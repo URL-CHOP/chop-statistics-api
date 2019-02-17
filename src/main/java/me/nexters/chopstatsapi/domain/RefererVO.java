@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
  */
 @Alias("referer_count")
 @Getter
-public class ReferrerVO {
+public class RefererVO {
     private String referer;
     private int count;
 }

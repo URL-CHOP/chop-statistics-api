@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
-import me.nexters.chopstatsapi.domain.RefererVO;
+import me.nexters.chopstatsapi.domain.ReferrerVO;
 
 /**
  * @author junho.park
@@ -16,5 +16,5 @@ import me.nexters.chopstatsapi.domain.RefererVO;
 @Mapper
 public interface RefererMapper {
     @Select("SELECT * FROM referer_count WHERE short_url = #{shortUrl}")
-    List<RefererVO> getRefererByShortUrl(@Param("shortUrl") String shortUrl);
+    List<ReferrerVO> getRefererByShortUrl(@Param("shortUrl") String shortUrl);
 }

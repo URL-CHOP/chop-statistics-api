@@ -1,6 +1,6 @@
 package me.nexters.chopstatsapi.repository;
 
-import me.nexters.chopstatsapi.domain.RefererVO;
+import me.nexters.chopstatsapi.domain.ReferrerVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +16,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RefererRepositoryTest {
+public class ReferrerRepositoryTest {
     @Autowired
-    RefererRepository refererRepository;
+    ReferrerRepository referrerRepository;
 
     @Test
     public void getRefererByShortUrl() {
-        List<RefererVO> refererVOList = refererRepository.getRefererByShortUrl("a");
-        for (RefererVO refererVO : refererVOList) {
-            assertThat(refererVO.getReferer()).isNotEmpty();
-            assertThat(refererVO.getCount()).isNotNull();
+        List<ReferrerVO> referrerVOList = referrerRepository.getRefererByShortUrl("a");
+        for (ReferrerVO referrerVO : referrerVOList) {
+            assertThat(referrerVO.getReferer()).isNotEmpty();
+            assertThat(referrerVO.getCount()).isNotNull();
         }
     }
 }

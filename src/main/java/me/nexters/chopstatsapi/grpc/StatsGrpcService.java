@@ -6,14 +6,19 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.domain.ClickDateVO;
 import me.nexters.chopstatsapi.domain.PlatformVO;
-import me.nexters.chopstatsapi.domain.RefererVO;
+import me.nexters.chopstatsapi.domain.ReferrerVO;
 import me.nexters.chopstatsapi.domain.TotalCountVO;
+import me.nexters.chopstatsapi.grpc.error.UrlErrorHandler;
 import me.nexters.chopstatsapi.repository.ClickDateRepository;
 import me.nexters.chopstatsapi.repository.PlatformRepository;
-import me.nexters.chopstatsapi.repository.RefererRepository;
+import me.nexters.chopstatsapi.repository.ReferrerRepository;
 import me.nexters.chopstatsapi.repository.TotalCountRepository;
+
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.sql.Date;
 import java.util.List;
@@ -24,117 +29,83 @@ import java.util.List;
 @GRpcService
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
-    private final PlatformRepository platformRepository;
-    private final RefererRepository refererRepository;
-    private final TotalCountRepository totalCountRepository;
-    private final ClickDateRepository clickDateRepository;
+	private final PlatformRepository platformRepository;
+	private final ReferrerRepository referrerRepository;
+	private final TotalCountRepository totalCountRepository;
+	private final ClickDateRepository clickDateRepository;
 
-    @Override
-    public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
-        String shortenUrl = request.getShortUrl();
+	@Override
+	public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
+		PlatformVO platformVO = platformRepository.getPlatformByShortUrl(request.getShortUrl());
+		if (platformVO == null) {
+			throwNotFoundException(responseObserver);
+		}
 
-        if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
-            throw new NullPointerException("url이 null 입니다");
-        }
+		Platform platform = Platform.newBuilder()
+			.setBrowser(platformVO.getBrowser())
+			.setMobile(platformVO.getMobile())
+			.build();
 
-        PlatformVO platformVO = platformRepository.getPlatformByShortUrl(shortenUrl);
+		responseObserver.onNext(platform);
+		responseObserver.onCompleted();
+	}
 
-        if (platformVO == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
-            throw new RuntimeException("존재하지 않는 url 입니다");
-        }
+	@Override
+	public void getRefererCount(UrlStatsRequest request, StreamObserver<Referer> responseObserver) {
+		List<ReferrerVO> referrers = referrerRepository.getRefererByShortUrl(request.getShortUrl());
+		if (CollectionUtils.isEmpty(referrers)) {
+			throwNotFoundException(responseObserver);
+		}
 
-        Platform platform = Platform.newBuilder()
-                .setBrowser(platformVO.getBrowser())
-                .setMobile(platformVO.getMobile())
-                .build();
+		referrers.stream()
+			.map(referrerVO -> Referer.newBuilder()
+				.setReferer(referrerVO.getReferer())
+				.setCount(referrerVO.getCount())
+				.build())
+			.forEach(responseObserver::onNext);
 
-        responseObserver.onNext(platform);
-        responseObserver.onCompleted();
-    }
+		responseObserver.onCompleted();
+	}
 
-    @Override
-    public void getRefererCount(UrlStatsRequest request, StreamObserver<Referer> responseObserver) {
-        String shortenUrl = request.getShortUrl();
+	@Override
+	public void getTotalCount(UrlStatsRequest request, StreamObserver<TotalCount> responseObserver) {
+		TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(request.getShortUrl());
+		if (totalCountVO == null) {
+			throwNotFoundException(responseObserver);
+		}
 
-        if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
-            throw new NullPointerException("url이 null 입니다");
-        }
+		TotalCount totalCount = TotalCount.newBuilder()
+			.setTotalCount(totalCountVO.getTotalCount())
+			.build();
 
-        List<RefererVO> refererVOList = refererRepository.getRefererByShortUrl(shortenUrl);
+		responseObserver.onNext(totalCount);
+		responseObserver.onCompleted();
+	}
 
-        if (refererVOList.get(0) == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
-            throw new RuntimeException("존재하지 않는 url 입니다");
-        }
+	@Override
+	public void getClickCount(UrlClickStatsRequest request, StreamObserver<ClickCount> responseObserver) {
+		List<ClickDateVO> clickDates = clickDateRepository.getClickDatePerWeekByShortUrl(request.getShortUrl(),
+			request.getWeek());
+		if (CollectionUtils.isEmpty(clickDates)) {
+			throwNotFoundException(responseObserver);
+		}
 
-        for (RefererVO refererVO : refererVOList) {
-            Referer referer = Referer.newBuilder()
-                    .setReferer(refererVO.getReferer())
-                    .setCount(refererVO.getCount())
-                    .build();
+		clickDates.stream()
+			.map(clickDateVO -> ClickCount.newBuilder()
+				.setDate(createTimeStampFromDate(clickDateVO.getClickDate()))
+				.setCount(clickDateVO.getCount())
+				.build())
+			.forEach(responseObserver::onNext);
 
-            responseObserver.onNext(referer);
-        }
+		responseObserver.onCompleted();
+	}
 
-        responseObserver.onCompleted();
-    }
+	private Timestamp createTimeStampFromDate(Date date) {
+		return Timestamp.newBuilder().setSeconds(date.getTime()).build();
+	}
 
-    @Override
-    public void getTotalCount(UrlStatsRequest request, StreamObserver<TotalCount> responseObserver) {
-        String shortenUrl = request.getShortUrl();
-
-        if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
-            throw new NullPointerException("url이 null 입니다");
-        }
-
-        TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(shortenUrl);
-
-        if (totalCountVO == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
-            throw new RuntimeException("존재하지 않는 url 입니다");
-        }
-
-        TotalCount totalCount = TotalCount.newBuilder()
-                .setTotalCount(totalCountVO.getTotalCount())
-                .build();
-
-        responseObserver.onNext(totalCount);
-        responseObserver.onCompleted();
-    }
-
-    @Override
-    public void getClickCount(UrlClickStatsRequest request, StreamObserver<ClickCount> responseObserver) {
-        String shortenUrl = request.getShortUrl();
-        int week = request.getWeek();
-
-        if (shortenUrl == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("url이 null 입니다").asException());
-            throw new NullPointerException("url이 null 입니다");
-        }
-
-        List<ClickDateVO> clickDateVOList = clickDateRepository.getClickDatePerWeekByShortUrl(shortenUrl, week);
-
-        if (clickDateVOList.get(0) == null) {
-            responseObserver.onError(Status.INTERNAL.withDescription("존재하지 않는 url 입니다").asException());
-            throw new RuntimeException("존재하지 않는 url 입니다");
-        }
-
-        for (ClickDateVO clickDateVO : clickDateVOList) {
-            ClickCount clickCount = ClickCount.newBuilder()
-                    .setDate(createTimeStampFromDate(clickDateVO.getClickDate()))
-                    .setCount(clickDateVO.getCount())
-                    .build();
-
-            responseObserver.onNext(clickCount);
-        }
-        responseObserver.onCompleted();
-    }
-
-    private Timestamp createTimeStampFromDate(Date date) {
-        return Timestamp.newBuilder().setSeconds(date.getTime()).build();
-    }
+	private void throwNotFoundException(StreamObserver response) {
+		response.onError(Status.INTERNAL.withDescription(UrlErrorHandler.NOT_FOUND.getMessage()).asException());
+		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, UrlErrorHandler.NOT_FOUND.getMessage());
+	}
 }

@@ -18,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class RefererRepositoryTest {
     @Autowired
-    RefererRepository refererRepository;
+    RefererRepository referrerRepository;
 
     @Test
     public void getRefererByShortUrl() {
-        List<RefererVO> refererVOList = refererRepository.getRefererByShortUrl("a");
-        for (RefererVO refererVO : refererVOList) {
-            assertThat(refererVO.getReferer()).isNotEmpty();
-            assertThat(refererVO.getCount()).isNotNull();
+        List<RefererVO> referrerVOList = referrerRepository.getRefererByShortUrl("a");
+        for (RefererVO referrerVO : referrerVOList) {
+            assertThat(referrerVO.getReferer()).isNotEmpty();
+            assertThat(referrerVO.getCount()).isNotNull();
         }
     }
 }

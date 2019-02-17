@@ -2,6 +2,7 @@ package me.nexters.chopstatsapi.repository;
 
 import lombok.RequiredArgsConstructor;
 import me.nexters.chopstatsapi.repository.mapper.UrlClickMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class UrlClickRepository {
 	private final UrlClickMapper urlClickMapper;
 
-	public void  insertTotalCount(String shortUrl) {
+	public void insertTotalCount(String shortUrl) {
 		urlClickMapper.insertTotalCount(shortUrl);
 	}
 
@@ -26,7 +27,7 @@ public class UrlClickRepository {
 	public void insertPlatform(String shortUrl, String platform) {
 		if (platform.equals("Mobile")) {
 			urlClickMapper.insertMobilePlatform(shortUrl);
-		} else if (platform.equals("Browser")) {
+		} else {
 			urlClickMapper.insertBrowserPlatform(shortUrl);
 		}
 	}

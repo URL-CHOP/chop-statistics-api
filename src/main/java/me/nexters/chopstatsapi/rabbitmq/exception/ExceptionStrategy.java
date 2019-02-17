@@ -13,7 +13,7 @@ public class ExceptionStrategy implements FatalExceptionStrategy {
 	public boolean isFatal(Throwable t) {
 
 		if (t instanceof RuntimeException) {
-			log.error("fatal error");
+			log.error("message queue error :{}", t.getMessage());
 		}
 		return false;
 	}

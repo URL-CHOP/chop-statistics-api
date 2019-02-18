@@ -27,7 +27,7 @@ public class ProducerTest {
     public void produce() {
         for (int i = 0; i < 5; i++) {
             producer.enqueue(QueueManager.CLICK_DATE.getRoutingKey(),
-                    new ClickDateCount("4321", 22L));
+                    new ClickDateCount("4321", 22L, 123123));
             sleep();
         }
     }

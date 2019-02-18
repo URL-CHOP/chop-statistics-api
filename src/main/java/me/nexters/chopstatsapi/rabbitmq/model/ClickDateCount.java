@@ -17,4 +17,5 @@ import lombok.ToString;
 public class ClickDateCount {
 	private String shortUrl;
 	private long dateSeconds;
+	private int dateNanos;
 }

@@ -37,10 +37,11 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
         Timestamp timestamp = request.getClickTime();
 
         String shortUrl = request.getShortUrl();
+        System.out.println(timestamp.getNanos());
 
         try {
             producer.enqueue(QueueManager.CLICK_DATE.getRoutingKey(),
-                new ClickDateCount(shortUrl, timestamp.getSeconds()));
+                new ClickDateCount(shortUrl, timestamp.getSeconds(), timestamp.getNanos()));
             producer.enqueue(QueueManager.PLATFORM_COUNT.getRoutingKey(),
                 new PlatformCount(shortUrl, PlatformUtil.checkMobile(request.getPlatform())));
             producer.enqueue(QueueManager.REFERRER_COUNT.getRoutingKey(),

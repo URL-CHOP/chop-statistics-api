@@ -27,7 +27,7 @@ public class QueueConsumer  {
 	@RabbitListener(containerFactory = "listenerContainerFactory", queues = "#{clickDateQueue.name}")
 	public void consumeClickDate(ClickDateCount clickDateCount) {
 		log.info("consume clickdate : {}", clickDateCount);
-		LocalDateTime dt = LocalDateTime.ofEpochSecond(clickDateCount.getDateSeconds(), 0, ZoneOffset.MAX);
+		LocalDateTime dt = LocalDateTime.ofEpochSecond(clickDateCount.getDateSeconds(), clickDateCount.getDateNanos(), ZoneOffset.MAX);
 		urlClickRepository.insertClickTime(clickDateCount.getShortUrl(), dt);
 	}
 

@@ -4,6 +4,7 @@ import com.google.protobuf.Timestamp;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.nexters.chopstatsapi.domain.ClickDateVO;
 import me.nexters.chopstatsapi.domain.PlatformVO;
 import me.nexters.chopstatsapi.domain.RefererVO;
@@ -26,6 +27,7 @@ import java.util.List;
 /**
  * @author junho.park
  */
+@Slf4j
 @GRpcService
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBase {
@@ -37,17 +39,19 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 	@Override
 	public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
 		PlatformVO platformVO = platformRepository.getPlatformByShortUrl(request.getShortUrl());
+
 		if (platformVO == null) {
 			throwNotFoundException(responseObserver);
+		} else {
+
+			Platform platform = Platform.newBuilder()
+					.setBrowser(platformVO.getBrowser())
+					.setMobile(platformVO.getMobile())
+					.build();
+
+			responseObserver.onNext(platform);
+			responseObserver.onCompleted();
 		}
-
-		Platform platform = Platform.newBuilder()
-			.setBrowser(platformVO.getBrowser())
-			.setMobile(platformVO.getMobile())
-			.build();
-
-		responseObserver.onNext(platform);
-		responseObserver.onCompleted();
 	}
 
 	@Override
@@ -70,16 +74,21 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 	@Override
 	public void getTotalCount(UrlStatsRequest request, StreamObserver<TotalCount> responseObserver) {
 		TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(request.getShortUrl());
+
 		if (totalCountVO == null) {
+			log.info("존재하지 않는 url");
 			throwNotFoundException(responseObserver);
+		} else {
+
+			TotalCount totalCount = TotalCount.newBuilder()
+					.setTotalCount(totalCountVO.getTotalCount())
+					.build();
+
+			log.info("해당 url에 대한 total count : {}", totalCount.getTotalCount());
+
+			responseObserver.onNext(totalCount);
+			responseObserver.onCompleted();
 		}
-
-		TotalCount totalCount = TotalCount.newBuilder()
-			.setTotalCount(totalCountVO.getTotalCount())
-			.build();
-
-		responseObserver.onNext(totalCount);
-		responseObserver.onCompleted();
 	}
 
 	@Override

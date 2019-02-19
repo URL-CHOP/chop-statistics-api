@@ -1,10 +1,5 @@
 package me.nexters.chopstatsapi.grpc;
 
-import org.lognet.springboot.grpc.GRpcService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +12,8 @@ import me.nexters.chopstatsapi.rabbitmq.model.PlatformCount;
 import me.nexters.chopstatsapi.rabbitmq.model.RefererCount;
 import me.nexters.chopstatsapi.rabbitmq.model.TotalCount;
 import me.nexters.chopstatsapi.rabbitmq.producer.Producer;
+import org.lognet.springboot.grpc.GRpcService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author junho.park
@@ -37,7 +34,6 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
         Timestamp timestamp = request.getClickTime();
 
         String shortUrl = request.getShortUrl();
-        System.out.println(timestamp.getNanos());
 
         try {
             producer.enqueue(QueueManager.CLICK_DATE.getRoutingKey(),

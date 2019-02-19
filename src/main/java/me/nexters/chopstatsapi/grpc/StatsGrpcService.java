@@ -43,7 +43,6 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 		if (platformVO == null) {
 			throwNotFoundException(responseObserver);
 		} else {
-
 			Platform platform = Platform.newBuilder()
 					.setBrowser(platformVO.getBrowser())
 					.setMobile(platformVO.getMobile())
@@ -76,15 +75,14 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 		TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(request.getShortUrl());
 
 		if (totalCountVO == null) {
-			log.info("존재하지 않는 url");
+			log.info("존재하지 않는 url : {}", request.getShortUrl());
 			throwNotFoundException(responseObserver);
 		} else {
-
 			TotalCount totalCount = TotalCount.newBuilder()
 					.setTotalCount(totalCountVO.getTotalCount())
 					.build();
-
-			log.info("해당 url에 대한 total count : {}", totalCount.getTotalCount());
+			log.info("url : {}", request.getShortUrl());
+			log.info("total count : {}", totalCount.getTotalCount());
 
 			responseObserver.onNext(totalCount);
 			responseObserver.onCompleted();

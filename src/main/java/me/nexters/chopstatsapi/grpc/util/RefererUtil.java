@@ -15,6 +15,6 @@ public class RefererUtil {
         if (matcher.find())
             return matcher.group(REFERER_GET);
 
-        return "web";
+        return "mobile";
     }
 }

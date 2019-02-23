@@ -13,7 +13,7 @@ public class RefererUtil {
     public static String checkReferer (String referer) {
         Matcher matcher = REFERER_REGEX.matcher(referer);
         if (matcher.find())
-            return matcher.group(REFERER_GET);
+            return matcher.group(REFERER_GET).replaceAll("www\\.", "");
 
         return "mobile";
     }

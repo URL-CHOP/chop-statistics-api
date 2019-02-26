@@ -1,6 +1,7 @@
 package me.nexters.chopstatsapi.grpc;
 
 import com.google.protobuf.Timestamp;
+import io.grpc.Context;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	@Override
 	public void getPlatformCount(UrlStatsRequest request, StreamObserver<Platform> responseObserver) {
+		if (Context.current().isCancelled()) {
+			responseObserver.onError(Status.CANCELLED.withDescription("Cancelled by client").asRuntimeException());
+			return;
+		}
+
 		PlatformVO platformVO = platformRepository.getPlatformByShortUrl(request.getShortUrl());
 
 		if (platformVO == null) {
@@ -55,7 +61,13 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	@Override
 	public void getRefererCount(UrlStatsRequest request, StreamObserver<Referer> responseObserver) {
+		if (Context.current().isCancelled()) {
+			responseObserver.onError(Status.CANCELLED.withDescription("Cancelled by client").asRuntimeException());
+			return;
+		}
+
 		List<RefererVO> referrers = referrerRepository.getRefererByShortUrl(request.getShortUrl());
+
 		if (CollectionUtils.isEmpty(referrers)) {
 			throwNotFoundException(responseObserver);
 		}
@@ -72,6 +84,11 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	@Override
 	public void getTotalCount(UrlStatsRequest request, StreamObserver<TotalCount> responseObserver) {
+		if (Context.current().isCancelled()) {
+			responseObserver.onError(Status.CANCELLED.withDescription("Cancelled by client").asRuntimeException());
+			return;
+		}
+
 		TotalCountVO totalCountVO = totalCountRepository.getTotalCountByShortUrl(request.getShortUrl());
 
 		if (totalCountVO == null) {
@@ -91,6 +108,11 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	@Override
 	public void getClickCount(UrlClickStatsRequest request, StreamObserver<ClickCount> responseObserver) {
+		if (Context.current().isCancelled()) {
+			responseObserver.onError(Status.CANCELLED.withDescription("Cancelled by client").asRuntimeException());
+			return;
+		}
+
 		List<ClickDateVO> clickDates = clickDateRepository.getClickDatePerWeekByShortUrl(request.getShortUrl(),
 			request.getWeek());
 		if (CollectionUtils.isEmpty(clickDates)) {

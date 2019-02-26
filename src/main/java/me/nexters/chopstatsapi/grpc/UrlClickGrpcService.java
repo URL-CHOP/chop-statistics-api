@@ -1,6 +1,8 @@
 package me.nexters.chopstatsapi.grpc;
 
 import com.google.protobuf.Timestamp;
+import io.grpc.Context;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,11 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
 
     @Override
     public void unaryRecordCount(Url request, StreamObserver<Success> responseObserver) {
+        if (Context.current().isCancelled()) {
+            responseObserver.onError(Status.CANCELLED.withDescription("Cancelled by client").asRuntimeException());
+            return;
+        }
+
         log.info("shortUrl from client : {} ", request.getShortUrl());
         log.info("referrer from client : {}", request.getReferer());
         log.info("platform from client : {}", request.getPlatform());

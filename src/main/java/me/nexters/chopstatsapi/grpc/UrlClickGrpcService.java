@@ -7,7 +7,7 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.chopstatsapi.grpc.util.PlatformUtil;
-import me.nexters.chopstatsapi.grpc.util.RefererUtil;
+import me.nexters.chopstatsapi.grpc.util.DomainParser;
 import me.nexters.chopstatsapi.rabbitmq.QueueManager;
 import me.nexters.chopstatsapi.rabbitmq.model.ClickDateCount;
 import me.nexters.chopstatsapi.rabbitmq.model.PlatformCount;
@@ -44,13 +44,13 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
 
         try {
             producer.enqueue(QueueManager.CLICK_DATE.getRoutingKey(),
-                new ClickDateCount(shortUrl, timestamp.getSeconds(), timestamp.getNanos()));
+                    new ClickDateCount(shortUrl, timestamp.getSeconds(), timestamp.getNanos()));
             producer.enqueue(QueueManager.PLATFORM_COUNT.getRoutingKey(),
-                new PlatformCount(shortUrl, PlatformUtil.checkMobile(request.getPlatform())));
+                    new PlatformCount(shortUrl, PlatformUtil.checkMobile(request.getPlatform())));
             producer.enqueue(QueueManager.REFERRER_COUNT.getRoutingKey(),
-                new RefererCount(shortUrl, RefererUtil.checkReferer(request.getReferer())));
+                    new RefererCount(shortUrl, DomainParser.getDomain(request.getReferer(), request.getPlatform())));
             producer.enqueue(QueueManager.TOTAL_COUNT.getRoutingKey(),
-                new TotalCount(shortUrl));
+                    new TotalCount(shortUrl));
         } catch (Exception e) {
             responseObserver.onError(new RuntimeException("queue produce error url : " + request.getShortUrl()));
             log.error("queue produce error url : {}, message : {}", request.getShortUrl(), e.getMessage());

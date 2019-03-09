@@ -38,8 +38,8 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
         log.info("referrer from client : {}", request.getReferer());
         log.info("platform from client : {}", request.getPlatform());
         log.info("click time from client : {}", request.getClickTime());
-        Timestamp timestamp = request.getClickTime();
 
+        Timestamp timestamp = request.getClickTime();
         String shortUrl = request.getShortUrl();
 
         try {

@@ -70,16 +70,16 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 		if (CollectionUtils.isEmpty(referrers)) {
 			throwNotFoundException(responseObserver);
+		} else {
+			referrers.stream()
+					.map(referrerVO -> Referer.newBuilder()
+							.setReferer(referrerVO.getReferer())
+							.setCount(referrerVO.getCount())
+							.build())
+					.forEach(responseObserver::onNext);
+
+			responseObserver.onCompleted();
 		}
-
-		referrers.stream()
-			.map(referrerVO -> Referer.newBuilder()
-				.setReferer(referrerVO.getReferer())
-				.setCount(referrerVO.getCount())
-				.build())
-			.forEach(responseObserver::onNext);
-
-		responseObserver.onCompleted();
 	}
 
 	@Override
@@ -115,18 +115,19 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 		List<ClickDateVO> clickDates = clickDateRepository.getClickDatePerWeekByShortUrl(request.getShortUrl(),
 			request.getWeek());
+
 		if (CollectionUtils.isEmpty(clickDates)) {
 			throwNotFoundException(responseObserver);
+		} else {
+			clickDates.stream()
+					.map(clickDateVO -> ClickCount.newBuilder()
+							.setDate(createTimeStampFromDate(clickDateVO.getClickDate()))
+							.setCount(clickDateVO.getCount())
+							.build())
+					.forEach(responseObserver::onNext);
+
+			responseObserver.onCompleted();
 		}
-
-		clickDates.stream()
-			.map(clickDateVO -> ClickCount.newBuilder()
-				.setDate(createTimeStampFromDate(clickDateVO.getClickDate()))
-				.setCount(clickDateVO.getCount())
-				.build())
-			.forEach(responseObserver::onNext);
-
-		responseObserver.onCompleted();
 	}
 
 	private Timestamp createTimeStampFromDate(Date date) {

@@ -28,8 +28,7 @@ public class DomainParser {
             return domainFromUserAgent;
         }
 
-        return "mobile";
-
+        return PlatformUtil.checkMobile(userAgent);
     }
 
 

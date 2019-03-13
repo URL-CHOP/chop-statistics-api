@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,12 +24,7 @@ public class DomainParser {
             return domainFromReferer;
         }
 
-        String domainFromUserAgent = fromUserAgent(userAgent);
-        if (Objects.nonNull(domainFromUserAgent)) {
-            return domainFromUserAgent;
-        }
-
-        return PlatformUtil.checkMobile(userAgent);
+        return fromUserAgent(userAgent).orElse(PlatformUtil.checkMobile(userAgent));
     }
 
 
@@ -41,14 +37,9 @@ public class DomainParser {
         return null;
     }
 
-    private static String fromUserAgent (String userAgent) {
-        String userAgentUpper = userAgent.toUpperCase();
-        for (String platForm : REFERER_CHECK_LIST) {
-            if (userAgentUpper.contains(platForm)) {
-                return platForm;
-            }
-        }
-
-        return null;
+    private static Optional<String> fromUserAgent(String userAgent) {
+        return REFERER_CHECK_LIST.stream()
+                .filter(userAgent.toUpperCase()::contains)
+                .findFirst();
     }
 }

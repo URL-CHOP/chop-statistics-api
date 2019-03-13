@@ -32,7 +32,7 @@ public class DomainParser {
     }
 
 
-    private String fromReferer(String referer) {
+    private static String fromReferer(String referer) {
         Matcher matcher = REFERER_REGEX.matcher(referer);
         if (matcher.find()) {
             return matcher.group(REFERER_GET).replaceAll("www\\.", "");
@@ -41,13 +41,14 @@ public class DomainParser {
         return null;
     }
 
-    private String fromUserAgent (String userAgent) {
+    private static String fromUserAgent (String userAgent) {
         String userAgentUpper = userAgent.toUpperCase();
         for (String platForm : REFERER_CHECK_LIST) {
             if (userAgentUpper.contains(platForm)) {
                 return platForm;
             }
         }
+
         return null;
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,32 +13,30 @@ import java.util.regex.Pattern;
  */
 @UtilityClass
 public class DomainParser {
-    private static final Pattern REFERER_REGEX = Pattern.compile("(//)([A-Z0-9a-zㄱ-ㅎㅏ-ㅣ가-힣:+&@#%?=~_|!:,.;-]+)");
-    private static final int REFERER_GET = 2;
+    // 영어 or 한글로 된 문자
+    private static final Pattern REFERER_REGEX = Pattern.compile("http[s]?://(www\\.)?([\\d\\wㄱ-ㅎㅏ-ㅣ가-힣\\-]+[^\\/.])");
     private static final List<String> REFERER_CHECK_LIST = Lists.newArrayList("KAKAO", "LINE");
+    private static final int FIRST_DOMAIN = 2;
 
-    public static String getDomain(String referer, String userAgent) {
-        String domainFromReferer = fromReferer(referer);
-        if (Objects.nonNull(domainFromReferer)) {
-            return domainFromReferer;
-        }
-
-        return fromUserAgent(userAgent).orElse(PlatformUtil.checkMobile(userAgent));
+    public static String getDomain(final String referer, final String userAgent) {
+       return fromReferer(referer)
+               .orElseGet(()-> fromUserAgent(userAgent));
     }
 
-
-    private static String fromReferer(String referer) {
+    private static Optional<String> fromReferer(final String referer) {
         Matcher matcher = REFERER_REGEX.matcher(referer);
+
         if (matcher.find()) {
-            return matcher.group(REFERER_GET).replaceAll("www\\.", "");
+            return Optional.ofNullable(matcher.group(FIRST_DOMAIN));
         }
 
-        return null;
+        return Optional.empty();
     }
 
-    private static Optional<String> fromUserAgent(String userAgent) {
+    private static String fromUserAgent(final String userAgent) {
         return REFERER_CHECK_LIST.stream()
                 .filter(userAgent.toUpperCase()::contains)
-                .findFirst();
+                .findFirst()
+                .orElseGet(() -> PlatformUtil.checkMobile(userAgent));
     }
 }

@@ -34,12 +34,10 @@ public class UrlClickGrpcService extends UrlClickServiceGrpc.UrlClickServiceImpl
             return;
         }
 
-        if(log.isDebugEnabled()){
-            log.info("shortUrl from client : {} ", request.getShortUrl());
-            log.info("referrer from client : {}", request.getReferer());
-            log.info("platform from client : {}", request.getPlatform());
-            log.info("click time from client : {}", request.getClickTime());
-        }
+        log.info("shortUrl from client : {} ", request.getShortUrl());
+        log.info("referrer from client : {}", request.getReferer());
+        log.info("platform from client : {}", request.getPlatform());
+        log.info("click time from client : {}", request.getClickTime());
 
         Timestamp timestamp = request.getClickTime();
         String shortUrl = request.getShortUrl();

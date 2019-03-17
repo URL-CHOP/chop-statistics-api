@@ -1,64 +1,32 @@
 package me.nexters.chopstatsapi.grpc.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class DomainParserTest {
 
-    @Test
-    public void shouldGetUserAgent(){
-        // given
-        String referrer = "";
-        String userAgent = "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36";
-
+    @ParameterizedTest(name = "expect Mobile Agent")
+    @CsvFileSource(resources = "/userAgentList.csv")
+    public void shouldGetUserAgent(String agent, String expect){
         // when
-        String actualAgent  = DomainParser.getDomain(referrer, userAgent);
+        String actualAgent  = DomainParser.getDomain("", agent);
 
         //then
-        Assert.assertThat(actualAgent,is("Mobile"));
+        assertThat(actualAgent,is(expect));
     }
 
-
-    @Test
-    public void shouldGetReferrer(){
-        // given
-        String referrer = "https://developer.mozilla.org/en-US/docs/Web/JavaScript";
-        String userAgent = "";
-
+    @ParameterizedTest(name = "expect {1} referrer")
+    @CsvFileSource(resources = "/referrerList.csv")
+    public void shouldGetReferrer(String referrer, String expect){
         // when
-        String actualAgent  = DomainParser.getDomain(referrer, userAgent);
+        String actualAgent  = DomainParser.getDomain(referrer, "");
 
         //then
-        Assert.assertThat(actualAgent,is("developer"));
+        assertThat(actualAgent,is(expect));
     }
-
-    @Test
-    public void shouldGetReferrerWithHyphen(){
-        // given
-        String referrer = "https://developer-mozilla.org/en-US/docs/Web/JavaScript";
-        String userAgent = "";
-
-        // when
-        String actualAgent  = DomainParser.getDomain(referrer, userAgent);
-
-        //then
-        Assert.assertThat(actualAgent,is("developer-mozilla"));
-    }
-
-    @Test
-    public void shouldGetReferrerWithWWW(){
-        // given
-        String referrer = "https://www.developer-mozilla/en-US/docs/Web/JavaScript";
-        String userAgent = "";
-
-        // when
-        String actualAgent  = DomainParser.getDomain(referrer, userAgent);
-
-        //then
-        Assert.assertThat(actualAgent,is("developer-mozilla"));
-    }
-
 
 }

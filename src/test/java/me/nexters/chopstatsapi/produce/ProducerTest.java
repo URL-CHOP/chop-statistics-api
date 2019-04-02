@@ -1,22 +1,19 @@
 package me.nexters.chopstatsapi.produce;
 
-import java.util.Date;
-
 import me.nexters.chopstatsapi.rabbitmq.QueueManager;
 import me.nexters.chopstatsapi.rabbitmq.model.ClickDateCount;
 import me.nexters.chopstatsapi.rabbitmq.model.PlatformCount;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import me.nexters.chopstatsapi.rabbitmq.producer.Producer;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import me.nexters.chopstatsapi.rabbitmq.producer.Producer;
 
 /**
  * @author manki.kim
  */
-@RunWith(SpringRunner.class)
+
+@Disabled
 @SpringBootTest
 public class ProducerTest {
 

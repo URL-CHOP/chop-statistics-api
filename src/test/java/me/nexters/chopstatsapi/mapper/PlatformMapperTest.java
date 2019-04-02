@@ -1,18 +1,24 @@
 package me.nexters.chopstatsapi.mapper;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import me.nexters.chopstatsapi.repository.mapper.PlatformMapper;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
 
 /**
- * @author junho.park
+ * @author chulwoon.jang
  */
-@RunWith(SpringRunner.class)
+
+@Disabled
+@MybatisTest
 @SpringBootTest
+@AutoConfigureTestDatabase(connection = H2)
 public class PlatformMapperTest {
 
     @Autowired

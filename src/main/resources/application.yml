@@ -12,8 +12,6 @@ grpc:
   port: 6565
 ---
 
-server:
-  port: 8081
 
 
 

@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Configuration
 public class RabbitMqConfig {
-	private static final String RABBITMQ_HOST = "45.119.144.56";
+	private static final String RABBITMQ_HOST = "127.0.0.1";
 	private static final int RABBITMQ_PORT = 5672;
 
 	@Bean

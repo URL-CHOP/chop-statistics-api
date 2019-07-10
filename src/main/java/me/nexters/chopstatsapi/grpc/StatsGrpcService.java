@@ -136,6 +136,5 @@ public class StatsGrpcService extends UrlStatsServiceGrpc.UrlStatsServiceImplBas
 
 	private void throwNotFoundException(StreamObserver response) {
 		response.onError(Status.NOT_FOUND.withDescription(UrlErrorHandler.NOT_FOUND.getMessage()).asException());
-		throw new HttpClientErrorException(HttpStatus.NOT_FOUND, UrlErrorHandler.NOT_FOUND.getMessage());
 	}
 }

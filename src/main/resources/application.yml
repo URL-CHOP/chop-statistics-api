@@ -8,11 +8,12 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+server:
+  port: 8081
+
 grpc:
   port: 6565
 
-server:
-  port: 8081
 
 
 

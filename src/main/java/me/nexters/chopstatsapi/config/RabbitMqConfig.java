@@ -25,7 +25,7 @@ import java.util.Map;
 @Configuration
 public class RabbitMqConfig {
 	private static final String RABBITMQ_HOST = "211.249.63.227";
-	private static final int RABBITMQ_PORT = 5672;
+	private static final int RABBITMQ_PORT = 15672;
 
 	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, RetryTemplate retryTemplate) {
@@ -68,8 +68,8 @@ public class RabbitMqConfig {
 	@Bean
 	public ConnectionFactory connectionFactory() {
 		ConnectionFactory connectionFactory = new CachingConnectionFactory(RABBITMQ_HOST, RABBITMQ_PORT);
-		((CachingConnectionFactory)connectionFactory).setUsername("chop");
-		((CachingConnectionFactory)connectionFactory).setPassword("nexters12");
+		((CachingConnectionFactory)connectionFactory).setUsername("nexters");
+		((CachingConnectionFactory)connectionFactory).setPassword("nexters");
 		return connectionFactory;
 	}
 

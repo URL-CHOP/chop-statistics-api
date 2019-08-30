@@ -23,7 +23,6 @@ import java.time.ZoneOffset;
 public class QueueConsumer  {
 	private final UrlClickRepository urlClickRepository;
 
-
 	@RabbitListener(containerFactory = "listenerContainerFactory", queues = "#{clickDateQueue.name}")
 	public void consumeClickDate(ClickDateCount clickDateCount) {
 		log.info("consume clickdate : {}", clickDateCount);
